@@ -95,46 +95,134 @@ function toggleRDExpansion() {
   }
 }
 
-
+//----------------------------------------------------------------------------------------------------------------------
 
 // Systematic Investment Plan (SIP) Calculation
-function calculateSIP() {
-  const amount = parseFloat(document.getElementById("sipAmount").value);
-  const rate = parseFloat(document.getElementById("sipRate").value);
-  const months = parseInt(document.getElementById("sipMonths").value);
+// Function to handle buying shares
+function buyUnits() {
+  const marketRate = parseFloat(document.getElementById("marketRateBuy").value);
+  const investmentAmount = parseFloat(document.getElementById("investmentAmount").value);
 
-  if (!amount || !rate || !months) {
-    alert("Please fill all fields.");
+  if (!investmentAmount || !marketRate) {
+    alert("Please enter both investment amount and market rate.");
     return;
   }
 
-  // Future Value formula for SIP
-  const futureValue = amount * (((Math.pow(1 + rate / 100, months) - 1) / (rate / 100)) * (1 + rate / 100));
+  const unitsBought = investmentAmount / marketRate;
 
-  // Display results as summary
-  document.getElementById("sipResult").innerHTML = 
-    `<p><strong>Initial Investment:</strong> ₹${amount.toFixed(2)}</p>
-    <p><strong>Returns:</strong> ₹${futureValue.toFixed(2)}</p>
-    <p><strong>Profit:</strong> ₹${(futureValue - (amount * months)).toFixed(2)}</p>`
-  ;
+  document.getElementById("buyResult").innerHTML = `
+    <p><strong>Investment Amount:</strong> ₹${investmentAmount.toFixed(2)}</p>
+    <p><strong>Market Rate (Buy Price per unit):</strong> ₹${marketRate.toFixed(2)}</p>
+    <p><strong>Units Bought:</strong> ${unitsBought.toFixed(4)}</p>
+  `;
 }
 
-// Time Value of Money (TVM) Calculation: Future Value
-function calculateTVM() {
-  const amount = parseFloat(document.getElementById("tvmAmount").value);
-  const rate = parseFloat(document.getElementById("tvmRate").value);
-  const time = parseFloat(document.getElementById("tvmTime").value);
+// Function to handle selling shares
+function sellUnits() {
+  const unitsOwned = parseFloat(document.getElementById("unitsOwned").value);
+  const marketRateSell = parseFloat(document.getElementById("marketRateSell").value);
 
-  if (!amount || !rate || !time) {
-    alert("Please fill all fields.");
+  if (!unitsOwned || !marketRateSell) {
+    alert("Please enter both the number of units you own and the market rate.");
     return;
   }
 
-  // Future Value (FV) formula
-  const futureValue = amount * Math.pow((1 + rate / 100), time);
+  const sellingPrice = unitsOwned * marketRateSell;
+  const initialInvestment = unitsOwned * parseFloat(document.getElementById("marketRateBuy").value);
+  const profitLoss = sellingPrice - initialInvestment;
 
-  // Display results as summary
-  document.getElementById("tvmResult").innerHTML =`<p><strong>Amount:</strong> ₹ ${amount.toFixed(2)}</p>
-    <p><strong>Future Value:</strong> ₹${futureValue.toFixed(2)}</p>`
-  ;
+  document.getElementById("sellResult").innerHTML = `
+    <p><strong>Units Owned:</strong> ${unitsOwned.toFixed(4)}</p>
+    <p><strong>Market Rate (Sell Price per unit):</strong> ₹${marketRateSell.toFixed(2)}</p>
+    <p><strong>Selling Price:</strong> ₹${sellingPrice.toFixed(2)}</p>
+    <p style="color: ${profitLoss >= 0 ? 'green' : 'red'};">
+      <strong>${profitLoss >= 0 ? "Profit" : "Loss"}: ₹${profitLoss.toFixed(2)}</strong>
+    </p>
+  `;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+
+
+// Time Value of Money (TVM) Calculation: Future Value
+// Toggle between Even and Uneven Annuity
+function selectAnnuity(type) {
+  if (type === 'even') {
+      document.getElementById("evenAnnuity").style.display = "block";
+      document.getElementById("unevenAnnuity").style.display = "none";
+      document.getElementById("evenBtn").style.backgroundColor = "#2c8eff"; // blue even
+      document.getElementById("unevenBtn").style.color = "black"; // uneven font black
+      document.getElementById("unevenBtn").style.backgroundColor = "#d3d3d3"; // grey uneven
+      document.getElementById("evenBtn").style.color = "white"; // even still white
+  } else {
+      document.getElementById("evenAnnuity").style.display = "none";
+      document.getElementById("unevenAnnuity").style.display = "block";
+      document.getElementById("unevenBtn").style.backgroundColor = "#2c8eff"; // uneven blue
+      document.getElementById("evenBtn").style.color = "black"; // even font black
+      document.getElementById("evenBtn").style.backgroundColor = "#d3d3d3"; // even grey
+      document.getElementById("unevenBtn").style.color = "white"; // uneven still white
+  }
+}
+
+// ✅ Corrected Formula for Even Annuity Calculation
+function calculateEvenAnnuity() {
+  const P = parseFloat(document.getElementById("evenAmount").value);
+  const r = parseFloat(document.getElementById("evenRate").value) / 100;
+  const n = 12; // Monthly compounding
+  const t = parseFloat(document.getElementById("evenMonths").value); // Number of months
+
+  if (!P || !r || !t) {
+      alert("Please enter all values.");
+      return;
+  }
+
+  // ✅ Corrected Even Annuity Formula:
+  // FV = P * [{(1 + r/n)^(nt) - 1} / (r/n)] * (1 + r/n)
+  const i = r / n;
+  const FV = P * ((Math.pow(1 + i, t) - 1) / i) * (1 + i);
+
+  document.getElementById("evenResult").innerHTML = `
+      <p><strong>Final Value:</strong> ₹${FV.toFixed(2)}</p>
+      <p><strong>Total Investment:</strong> ₹${(P * t).toFixed(2)}</p>
+      <p><strong>Profit:</strong> ₹${(FV - (P * t)).toFixed(2)}</p>
+  `;
+}
+
+// ✅ Adding Fields for Uneven Annuity
+function addInvestmentField() {
+  const div = document.createElement("div");
+  div.innerHTML = `<input type="number" placeholder="Investment (₹)" class="uneven-input">`;
+  document.getElementById("investmentList").appendChild(div);
+}
+
+// ✅ Corrected Formula for Uneven Annuity Calculation
+function calculateUnevenAnnuity() {
+  const investments = document.querySelectorAll(".uneven-input");
+  const r = parseFloat(document.getElementById("unevenRate").value) / 100;
+  const n = 12; // Monthly compounding
+  const t = parseFloat(document.getElementById("unevenMonths").value); // Number of months
+
+  if (!r || !t) {
+      alert("Please enter all values.");
+      return;
+  }
+
+  let FV = 0;
+  let totalInvested = 0;
+  const i = r / n;
+
+  investments.forEach((input, index) => {
+      const Pi = parseFloat(input.value);
+      if (Pi) {
+          const remainingMonths = t - index;
+          FV += Pi * Math.pow(1 + i, remainingMonths);
+          totalInvested += Pi;
+      }
+  });
+
+  document.getElementById("unevenResult").innerHTML = `
+      <p><strong>Final Value:</strong> ₹${FV.toFixed(2)}</p>
+      <p><strong>Total Investment:</strong> ₹${totalInvested.toFixed(2)}</p>
+      <p><strong>Profit:</strong> ₹${(FV - totalInvested).toFixed(2)}</p>
+  `;
 }
