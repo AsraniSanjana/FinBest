@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Investment Calculator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="navbar">
+    <h2>Investment Calculator</h2>
+  </div>
+
+  <div class="container">
+    <!-- FD Section -->
+    <div id="fd" class="section box">
+      <h3>FD Calculator (Lumpsum - One Time)</h3>
+      <input type="number" id="fdPrincipal" placeholder="Principal (₹)">
+      <input type="number" id="fdRate" placeholder="Annual Interest Rate (%)">
+      <input type="number" id="fdTime" placeholder="Time (Years)">
+
+      <div class="interest-buttons">
+        <button id="siBtn" class="interest-btn" onclick="selectInterest('SI')">Simple Interest (SI)</button>
+        <button id="ciBtn" class="interest-btn" onclick="selectInterest('CI')">Compound Interest (CI)</button>
+      </div>
+      
+      <button onclick="calculateFD()">Calculate</button>
+      <div id="fdResult"></div>
+    </div>
+
+    <!-- RD Section -->
+    <div id="rd" class="section box">
+      <h3>RD Calculator (Recurring Deposit - Even Annuity)</h3>
+      <input type="number" id="rdAmount" placeholder="Monthly Installment (₹)">
+      <input type="number" id="rdRate" placeholder="Annual Interest Rate (%)">
+      <input type="number" id="rdMonths" placeholder="Months">
+      <button onclick="calculateRD()">Calculate</button>
+      <div id="rdResult"></div>
+      <button id="expandRD" onclick="toggleRDExpansion()">Expand</button>
+      <div id="rdExpansion" class="expanded-details" style="display:none;"></div>
+    </div>
+
+    <!-- SIP Section -->
+    <div id="sip" class="section box">
+      <h3>SIP Calculator</h3>
+      <input type="number" id="sipAmount" placeholder="Monthly Investment (₹)">
+      <input type="number" id="sipRate" placeholder="Annual Interest Rate (%)">
+      <input type="number" id="sipMonths" placeholder="Months">
+      <button onclick="calculateSIP()">Calculate</button>
+      <div id="sipResult"></div>
+    </div>
+
+    <!-- TVM Section -->
+    <div id="tvm" class="section box">
+      <h3>Time Value of Money</h3>
+      <input type="number" id="tvmAmount" placeholder="Amount (₹)">
+      <input type="number" id="tvmRate" placeholder="Interest Rate (%)">
+      <input type="number" id="tvmTime" placeholder="Time (Years)">
+      <button onclick="calculateTVM()">Calculate</button>
+      <div id="tvmResult"></div>
+    </div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
