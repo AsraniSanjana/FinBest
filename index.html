@@ -31,35 +31,71 @@
 
     <!-- RD Section -->
     <div id="rd" class="section box">
-      <h3>RD Calculator (Recurring Deposit - Even Annuity)</h3>
+      <h3>RD Calculator (Recurring Deposit)</h3>
       <input type="number" id="rdAmount" placeholder="Monthly Installment (₹)">
       <input type="number" id="rdRate" placeholder="Annual Interest Rate (%)">
       <input type="number" id="rdMonths" placeholder="Months">
       <button onclick="calculateRD()">Calculate</button>
       <div id="rdResult"></div>
+      <br/>
       <button id="expandRD" onclick="toggleRDExpansion()">Expand</button>
       <div id="rdExpansion" class="expanded-details" style="display:none;"></div>
     </div>
 
     <!-- SIP Section -->
-    <div id="sip" class="section box">
-      <h3>SIP Calculator</h3>
-      <input type="number" id="sipAmount" placeholder="Monthly Investment (₹)">
-      <input type="number" id="sipRate" placeholder="Annual Interest Rate (%)">
-      <input type="number" id="sipMonths" placeholder="Months">
-      <button onclick="calculateSIP()">Calculate</button>
-      <div id="sipResult"></div>
+    <div id="sipTrading" class="section box">
+      <h3>SIP MF</h3>
+      <h6>Buy Shares/Gold</h6>
+      <input type="number" id="marketRateBuy" placeholder="Current Market Rate per Unit (₹)">
+      <input type="number" id="investmentAmount" placeholder="Amount to Invest (₹)">
+      <button onclick="buyUnits()" style="background: #2c8eff;">Buy</button>
+      <div id="buyResult"></div>
+    
+      <h6>Sell Shares/Gold</h6>
+      <input type="number" id="unitsOwned" placeholder="Enter no. of units you own">
+      <input type="number" id="marketRateSell" placeholder="Market Price per Unit (₹)">
+      <button onclick="sellUnits()" style="background: #2c8eff;">Sell</button>
+      <div id="sellResult"></div>
     </div>
+    
+    
 
-    <!-- TVM Section -->
+    <!-- TVM (Time Value of Money) Section with FV, PV of Annuity (even and uneven)-->
+  <!--
     <div id="tvm" class="section box">
-      <h3>Time Value of Money</h3>
-      <input type="number" id="tvmAmount" placeholder="Amount (₹)">
-      <input type="number" id="tvmRate" placeholder="Interest Rate (%)">
-      <input type="number" id="tvmTime" placeholder="Time (Years)">
-      <button onclick="calculateTVM()">Calculate</button>
-      <div id="tvmResult"></div>
-    </div>
+     
+      <h2>Annuity Investment Calculator</h2>
+
+      <div class="annuity-toggle">
+          <button id="evenBtn" onclick="selectAnnuity('even')">Even Annuity</button>
+          <hr/>
+          <button id="unevenBtn" onclick="selectAnnuity('uneven')">Uneven Annuity</button>
+      </div>
+
+      //Even Annuity Inputs
+      <div id="evenAnnuity" class="annuity-section">
+          <h3>Even Annuity</h3>
+          <input type="number" id="evenAmount" placeholder="Monthly Investment (₹)">
+          <input type="number" id="evenRate" placeholder="Annual Interest Rate (%)">
+          <input type="number" id="evenMonths" placeholder="Total Months">
+          <button onclick="calculateEvenAnnuity()">Calculate</button>
+          <div id="evenResult"></div>
+      </div>
+
+      // Uneven Annuity Inputs
+      <div id="unevenAnnuity" class="annuity-section" style="display: none;">
+        
+          <h3>Uneven Annuity</h3>
+          <div id="investmentList">
+              <input type="number" placeholder="Investment (₹)" class="uneven-input">
+          </div>
+          <button onclick="addInvestmentField()">Add Investment</button>
+          <input type="number" id="unevenRate" placeholder="Annual Interest Rate (%)">
+          <input type="number" id="unevenMonths" placeholder="Total Months">
+          <button onclick="calculateUnevenAnnuity()">Calculate</button>
+          <div id="unevenResult"></div>
+      </div>
+    -->
   </div>
 
   <script src="scripts.js"></script>
